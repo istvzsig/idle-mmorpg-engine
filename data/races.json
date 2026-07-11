@@ -1,0 +1,22 @@
+[
+	{
+		"id": "valorian",
+		"name": "Valorian",
+		"bonus": "balanced"
+	},
+	{
+		"id": "elyndor",
+		"name": "Elyndor",
+		"bonus": "mana"
+	},
+	{
+		"id": "kaari",
+		"name": "Kaari",
+		"bonus": "agility"
+	},
+	{
+		"id": "dravun",
+		"name": "Dravun",
+		"bonus": "health"
+	}
+]

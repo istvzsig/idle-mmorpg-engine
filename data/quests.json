@@ -1,0 +1,11 @@
+[
+	{
+		"id": "kobold_problem",
+		"name": "A Kobold Problem",
+		"description": "Defeat 5 Kobold Miners",
+		"enemy": "kobold_miner",
+		"amount": 5,
+		"xp_reward": 100,
+		"gold_reward": 25
+	}
+]

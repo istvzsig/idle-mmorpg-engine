@@ -1,0 +1,32 @@
+[
+	{
+		"id": "rusty_sword",
+		"name": "Rusty Sword",
+		"type": "weapon",
+		"damage": 5,
+		"rarity": "common"
+	},
+	{
+		"id": "wolf_fang",
+		"name": "Wolf Fang",
+		"type": "weapon",
+		"damage": 5,
+		"value": 5,
+		"rarity": "common"
+	},
+	{
+		"id": "kobold_dagger",
+		"name": "Kobold Dagger",
+		"type": "weapon",
+		"damage": 5,
+		"value": 8,
+		"rarity": "common"
+	},
+	{
+		"id": "leather_armor",
+		"name": "Leather Armor",
+		"type": "armor",
+		"armor": 5,
+		"rarity": "common"
+	}
+]

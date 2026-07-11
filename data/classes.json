@@ -1,0 +1,38 @@
+[
+	{
+		"id": "guardian",
+		"name": "Guardian",
+		"primary_stat": "strength",
+		"health": 120,
+		"mana": 20,
+		"damage": 12,
+		"armor": 15
+	},
+	{
+		"id": "arcanist",
+		"name": "Arcanist",
+		"primary_stat": "intelligence",
+		"health": 70,
+		"mana": 120,
+		"damage": 18,
+		"armor": 5
+	},
+	{
+		"id": "shadowblade",
+		"name": "Shadowblade",
+		"primary_stat": "agility",
+		"health": 90,
+		"mana": 40,
+		"damage": 16,
+		"armor": 8
+	},
+	{
+		"id": "warden",
+		"name": "Warden",
+		"primary_stat": "spirit",
+		"health": 100,
+		"mana": 80,
+		"damage": 10,
+		"armor": 12
+	}
+]

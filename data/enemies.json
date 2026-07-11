@@ -1,0 +1,18 @@
+[
+	{
+		"id": "forest_rat",
+		"name": "Forest Rat",
+		"health": 25,
+		"damage": 4,
+		"experience": 10,
+		"gold": 2
+	},
+	{
+		"id": "wild_goblin",
+		"name": "Wild Goblin",
+		"health": 60,
+		"damage": 8,
+		"experience": 25,
+		"gold": 8
+	}
+]

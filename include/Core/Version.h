@@ -1,0 +1,5 @@
+#pragma once
+
+#define IdleMMORPG_VERSION_MAJOR 0
+#define IdleMMORPG_VERSION_MINOR 1
+#define IdleMMORPG_VERSION_PATCH 0
