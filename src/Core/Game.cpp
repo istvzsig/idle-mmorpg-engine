@@ -1,17 +1,18 @@
 #include <string>
+#include <memory>
 
-#include "Core/Game.h"
-#include "Core/DataManager.h"
 #include "Core/Logger.h"
+#include "Core/Game.h"
 #include "Core/GameMessage.h"
-
-#include "Character/CharacterFactory.h"
+#include "Core/DataManager.h"
+#include "Core/States/MainMenuState.h"
 
 #include "Combat/Enemy.h"
 #include "Combat/EnemyFactory.h"
 #include "Combat/CombatSystem.h"
 #include "Combat/CombatResult.h"
 
+#include "Character/CharacterFactory.h"
 #include "Items/ItemFactory.h"
 
 namespace IdleMMORPG
@@ -39,71 +40,8 @@ namespace IdleMMORPG
 			return false;
 		}
 
-		std::string name =
-			m_ui.createCharacterName();
-
-		std::string raceId =
-			m_ui.chooseCharacterRace(
-				m_dataManager);
-
-		std::string classId =
-			m_ui.chooseCharacterClass(
-				m_dataManager);
-
-		m_player =
-			CharacterFactory::create(
-				name,
-				raceId,
-				classId,
-				m_dataManager);
-
-		if (!m_player)
-		{
-			Logger::error(
-				"Failed creating character");
-
-			return false;
-		}
-
-		Logger::info(
-			"Created character: " + m_player->getName());
-
-		Logger::info(
-			"Level: " +
-			std::to_string(
-				m_player->getLevel()));
-
-		Logger::info(
-			"Health: " +
-			std::to_string(
-				m_player->getStats().health));
-
-		Logger::info(
-			"Mana: " +
-			std::to_string(
-				m_player->getStats().mana));
-
-		Logger::info(
-			"Damage: " +
-			std::to_string(
-				m_player->getDamage()));
-
-		Logger::info(
-			"Armor: " +
-			std::to_string(
-				m_player->getArmor()));
-
-		m_currentEnemy =
-			m_enemySpawner.spawn(
-				m_dataManager);
-
-		if (!m_currentEnemy)
-		{
-			Logger::error(
-				"Failed creating starting enemy");
-
-			return false;
-		}
+		m_stateManager.changeState(
+			std::make_unique<MainMenuState>());
 
 		m_running = true;
 
@@ -119,50 +57,10 @@ namespace IdleMMORPG
 
 		while (m_running)
 		{
-			render();
 
-			char input =
-				m_ui.getInput();
+			m_stateManager.update();
 
-			switch (input)
-			{
-			case 'f':
-			case 'F':
-				update();
-				break;
-
-			case 'i':
-			case 'I':
-
-				m_ui.showInventory(*this);
-
-				m_ui.waitForInput();
-
-				break;
-
-			case 'c':
-			case 'C':
-
-				m_ui.showCharacter(*this);
-
-				m_ui.waitForInput();
-
-				break;
-
-			case 'q':
-			case 'Q':
-
-				shutdown();
-
-				break;
-
-			default:
-
-				Logger::error(
-					"Unknown command");
-
-				break;
-			}
+			m_stateManager.render();
 		}
 
 		shutdown();
@@ -170,7 +68,6 @@ namespace IdleMMORPG
 
 	void Game::update()
 	{
-
 		Logger::info(
 			"Updating game");
 
@@ -186,16 +83,19 @@ namespace IdleMMORPG
 
 		GameMessage::add(
 			"You hit for " +
-			std::to_string(result.damageDealt) +
+			std::to_string(
+				result.damageDealt) +
 			" damage.");
 
 		GameMessage::add(
 			"You take " +
-			std::to_string(result.damageTaken) +
+			std::to_string(
+				result.damageTaken) +
 			" damage.");
 
 		if (m_currentEnemy->isDead())
 		{
+
 			GameMessage::add(
 				m_currentEnemy->getName() +
 				" defeated!");
@@ -220,9 +120,6 @@ namespace IdleMMORPG
 			m_player->addGold(
 				gold);
 
-			const auto lootId =
-				m_currentEnemy->getLootId();
-
 			GameMessage::add(
 				"XP gained: " +
 				std::to_string(xp));
@@ -231,66 +128,39 @@ namespace IdleMMORPG
 				"Gold gained: " +
 				std::to_string(gold));
 
+			const auto lootId =
+				m_currentEnemy->getLootId();
+
 			if (!lootId.empty())
 			{
+
 				Logger::info(
-					"Attempting loot: " + lootId);
+					"Attempting loot: " +
+					lootId);
 
 				auto item =
 					ItemFactory::create(
 						lootId,
 						m_dataManager);
 
-				if (!item)
+				if (item)
 				{
-					Logger::error(
-						"Failed creating loot item");
 
-					return;
+					GameMessage::add(
+						"Loot received: " +
+						item->getName());
+
+					std::shared_ptr<Item> sharedItem =
+						std::move(item);
+
+					m_player
+						->getInventory()
+						.addItem(sharedItem);
+
+					m_player
+						->equipItem(sharedItem);
 				}
-
-				GameMessage::add(
-					"Loot received: " +
-					item->getName());
-
-				std::shared_ptr<Item> sharedItem =
-					std::move(item);
-
-				Logger::info(
-					"Adding item to inventory");
-
-				m_player->getInventory()
-					.addItem(sharedItem);
-
-				Logger::info(
-					"Item added");
-
-				m_player
-					->equipItem(sharedItem);
 			}
-
-			Logger::info(
-				"Level: " +
-				std::to_string(
-					m_player->getStats().level));
-
-			Logger::info(
-				"XP: " +
-				std::to_string(
-					m_player->getStats().experience) +
-				"/" +
-				std::to_string(
-					m_player->getStats().experienceRequired));
-
-			Logger::info(
-				"Total Gold: " +
-				std::to_string(
-					m_player->getStats().gold));
-
-			m_ui.showInventory(*this);
-
-			Logger::info(
-				"Combat finished");
 
 			m_currentEnemy =
 				m_enemySpawner.spawn(
@@ -301,11 +171,13 @@ namespace IdleMMORPG
 	void Game::render()
 	{
 		m_ui.draw(*this);
+
 		GameMessage::print();
 	}
 
 	void Game::shutdown()
 	{
+
 		if (!m_running)
 		{
 			return;

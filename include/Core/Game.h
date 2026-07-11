@@ -2,15 +2,16 @@
 
 #include <memory>
 
+#include "Core/GameStateManager.h"
 #include "Core/DataManager.h"
 
-#include "Character/Character.h"
-
 #include "Combat/Enemy.h"
-#include "Combat/CombatSystem.h"
 #include "Combat/EnemySpawner.h"
+#include "Combat/CombatSystem.h"
 
 #include "UI/ConsoleUI.h"
+
+#include "Character/Character.h"
 
 namespace IdleMMORPG
 {
@@ -41,6 +42,7 @@ namespace IdleMMORPG
 		bool m_running;
 
 		DataManager m_dataManager;
+		GameStateManager m_stateManager;
 
 		CombatSystem m_combat;
 
