@@ -1,5 +1,5 @@
-.DS_store
-.vscore
-build
-.vscode
-
+build/
+*.o
+*.exe
+.DS_Store
+.vscode/
